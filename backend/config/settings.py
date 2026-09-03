@@ -4,15 +4,24 @@ Django settings for Anything Automation website.
 import os
 from pathlib import Path
 from datetime import timedelta
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv(BASE_DIR / ".env")
 
 # ---------------------------------------------------------------------------
 # SECURITY
 # ---------------------------------------------------------------------------
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "change-this-in-.env-before-deploy")
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    "change-this-in-.env-before-deploy"
+)
 DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = os.environ.get(
+    "DJANGO_ALLOWED_HOSTS",
+    "localhost,127.0.0.1"
+).split(",")
 
 # ---------------------------------------------------------------------------
 # APPLICATIONS
@@ -76,11 +85,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": os.environ.get("DB_NAME", "anything_automation"),
-        "USER": os.environ.get("DB_USER", "aa_user"),
-        "PASSWORD": os.environ.get("DB_PASSWORD", "changeme"),
-        "HOST": os.environ.get("DB_HOST", "127.0.0.1"),
-        "PORT": os.environ.get("DB_PORT", "3306"),
+        "NAME": "anything_automation",
+        "USER": "aa_user",
+        "PASSWORD": "Akash@123",
+        "HOST": "localhost",
+        "PORT": "3306",
         "OPTIONS": {
             "charset": "utf8mb4",
         },
