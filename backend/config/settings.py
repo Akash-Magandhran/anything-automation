@@ -1,6 +1,7 @@
 """
 Django settings for Anything Automation website.
 """
+from dotenv import load_dotenv
 import os
 from pathlib import Path
 from datetime import timedelta
