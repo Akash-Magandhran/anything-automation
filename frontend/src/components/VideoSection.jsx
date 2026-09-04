@@ -21,11 +21,11 @@ export default function VideoSection() {
         <div className="video-card">
           <video
             className="automation-video"
-            controls
+            autoPlay
             muted
             loop
-            
-            autoplay
+            playsInline
+          
             
           >
             <source
