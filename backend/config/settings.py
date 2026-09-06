@@ -14,7 +14,8 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Local development .env
+# Load local .env file during development.
+# Render uses its Environment Variables.
 load_dotenv(BASE_DIR / ".env")
 
 
@@ -24,7 +25,7 @@ load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = os.environ.get(
     "DJANGO_SECRET_KEY",
-    "change-this-in-.env-before-deploy",
+    "change-this-in-production",
 )
 
 DEBUG = os.environ.get(
@@ -34,12 +35,10 @@ DEBUG = os.environ.get(
 
 
 ALLOWED_HOSTS = [
-    host.strip()
-    for host in os.environ.get(
-        "DJANGO_ALLOWED_HOSTS",
-        "localhost,127.0.0.1",
-    ).split(",")
-    if host.strip()
+    "localhost",
+    "127.0.0.1",
+    "anything-automation.onrender.com",
+    "anythingautomation.com",
 ]
 
 
@@ -78,7 +77,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
 
-    # CORS should be before CommonMiddleware
+    # CORS must be before CommonMiddleware
     "corsheaders.middleware.CorsMiddleware",
 
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -91,7 +90,7 @@ MIDDLEWARE = [
 
 
 # =============================================================================
-# URL / WSGI
+# URL CONFIGURATION
 # =============================================================================
 
 ROOT_URLCONF = "config.urls"
@@ -121,7 +120,7 @@ TEMPLATES = [
 
 
 # =============================================================================
-# DATABASE - MYSQL / AIVEN
+# DATABASE - AIVEN MYSQL
 # =============================================================================
 
 DATABASES = {
@@ -150,25 +149,25 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": (
             "django.contrib.auth.password_validation."
             "UserAttributeSimilarityValidator"
-        )
+        ),
     },
     {
         "NAME": (
             "django.contrib.auth.password_validation."
             "MinimumLengthValidator"
-        )
+        ),
     },
     {
         "NAME": (
             "django.contrib.auth.password_validation."
             "CommonPasswordValidator"
-        )
+        ),
     },
     {
         "NAME": (
             "django.contrib.auth.password_validation."
             "NumericPasswordValidator"
-        )
+        ),
     },
 ]
 
@@ -190,7 +189,7 @@ USE_TZ = True
 # STATIC FILES
 # =============================================================================
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
@@ -199,7 +198,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # MEDIA FILES
 # =============================================================================
 
-MEDIA_URL = "media/"
+MEDIA_URL = "/media/"
 
 MEDIA_ROOT = BASE_DIR / "media"
 
@@ -241,12 +240,11 @@ REST_FRAMEWORK = {
 # =============================================================================
 
 CORS_ALLOWED_ORIGINS = [
-    origin.strip().rstrip("/")
-    for origin in os.environ.get(
-        "CORS_ALLOWED_ORIGINS",
-        "http://localhost:5173,http://127.0.0.1:5173",
-    ).split(",")
-    if origin.strip()
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+
+    # Production Vercel frontend
+    "https://anything-automation1.vercel.app",
 ]
 
 
@@ -255,12 +253,11 @@ CORS_ALLOWED_ORIGINS = [
 # =============================================================================
 
 CSRF_TRUSTED_ORIGINS = [
-    origin.strip().rstrip("/")
-    for origin in os.environ.get(
-        "CSRF_TRUSTED_ORIGINS",
-        "",
-    ).split(",")
-    if origin.strip()
+    # Production Vercel frontend
+    "https://anything-automation1.vercel.app",
+
+    # Production Django backend
+    "https://anything-automation.onrender.com",
 ]
 
 
@@ -298,3 +295,24 @@ CONTACT_NOTIFY_EMAIL = os.environ.get(
     "CONTACT_NOTIFY_EMAIL",
     "office.anythingautomation@gmail.com",
 )
+
+
+# =============================================================================
+# PRODUCTION SECURITY
+# =============================================================================
+
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = (
+        "HTTP_X_FORWARDED_PROTO",
+        "https",
+    )
+
+    SESSION_COOKIE_SECURE = True
+
+    CSRF_COOKIE_SECURE = True
+
+    SECURE_BROWSER_XSS_FILTER = True
+
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+
+    X_FRAME_OPTIONS = "DENY"
