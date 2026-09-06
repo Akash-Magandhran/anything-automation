@@ -75,28 +75,6 @@ On Windows, you can also create `.env` manually from `.env.example`.
 
 ---
 
-## Environment Variables
-
-The backend uses environment variables for sensitive configuration.
-
-Example:
-
-```env
-DJANGO_SECRET_KEY=your-secret-key
-DJANGO_DEBUG=True
-
-DB_NAME=your_database
-DB_USER=your_database_user
-DB_PASSWORD=your_database_password
-DB_HOST=localhost
-DB_PORT=3306
-
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_HOST_USER=your-email@gmail.com
-EMAIL_HOST_PASSWORD=your-gmail-app-password
-CONTACT_NOTIFY_EMAIL=your-email@gmail.com
-```
 
 For production, use the database and credentials provided by your managed MySQL provider.
 
@@ -313,19 +291,6 @@ python manage.py createsuperuser
 
 ---
 
-# 4. Production Database — Aiven MySQL
-
-The production Django backend uses a managed **Aiven MySQL** database.
-
-The database connection is configured through environment variables:
-
-```env
-DB_NAME=defaultdb
-DB_USER=avnadmin
-DB_PASSWORD=your-aiven-password
-DB_HOST=your-aiven-host
-DB_PORT=your-aiven-port
-```
 
 > **Do not commit database passwords, API keys or other secrets to GitHub.**
 
